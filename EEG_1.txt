@@ -1,0 +1,53 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Apr 12 17:08:27 2020
+
+@author: Nafisa
+"""
+
+def make_meshgrid(x, y, h=.02):
+ """Create a mesh of points to plot in
+ Parameters
+ ----------
+ x: data to base x-axis meshgrid on
+ y: data to base y-axis meshgrid on
+ h: stepsize for meshgrid, optional
+ Returns
+ -------
+ xx, yy : ndarray
+ """
+ x_min, x_max = x.min() - 1, x.max() + 1
+ y_min, y_max = y.min() - 1, y.max() + 1
+ xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
+ np.arange(y_min, y_max, h))
+ return xx, yy
+from sklearn.svm import LinearSVC
+from sklearn import datasets
+from sklearn.preprocessing import StandardScaler
+import numpy as np
+from matplotlib import pyplot as plt
+import pandas as pd
+data1 = pd.read_csv('C:/Users/Nafisa/Downloads/meditation-eegdata/meditating.csv')
+data2 = pd.read_csv('C:/Users/Nafisa/Downloads/meditation-eegdata/thinking.csv')
+tdata1 = data1.T
+tdata2 = data2.T
+features=data1.values[200:1]
+target=data2.think[200:1]
+#scaler=StandardScaler()
+#features_Standardized=scaler.fit(features)
+svc=LinearSVC(C=1.0)
+model=svc.fit(features,target)
+color=["black" if c==0 else "Red" for c in target ]
+plt.scatter(features[:,0],features[:,1],c=color)
+w=svc.coef_[0]
+a=-w[0]/w[1]
+xx=np.linspace(3,8)
+yy=a*xx-(svc.intercept_[0])/w[1]
+X0, X1 = features[:, 0], features[:, 1]
+x_x, y_y = make_meshgrid(X0, X1)
+#plt.plot(x_x,y_y)
+plt.plot(xx,yy)
+plt.show();
+# Test new value
+#newdata=[[6,2]]
+#svc.predict(newdata)
